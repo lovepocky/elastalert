@@ -25,6 +25,9 @@ RUN printf "[easy_install]\n\
 index-url=https://mirrors.aliyun.com/pypi/simple/\n\
 find-links=https://mirrors.aliyun.com/pypi/simple/" > ~/.pydistutils.cfg
 
+# bugfix: https://github.com/Yelp/elastalert/issues/2204
+RUN pip install elasticsearch==6.3.0 -i $PROXY_PYPI
+
 # Install Elastalert.
 # see: https://github.com/Yelp/elastalert/issues/1654
 RUN sed -i 's/jira>=1.0.10/jira>=1.0.10,<1.0.15/g' setup.py && \
@@ -46,6 +49,7 @@ COPY --from=py-ea /usr/bin/elastalert* /usr/bin/
 WORKDIR /opt/elastalert-server
 COPY . /opt/elastalert-server
 
+COPY .npmrc /root/
 RUN npm install --production --quiet
 COPY config/elastalert.yaml /opt/elastalert/config.yaml
 COPY config/elastalert-test.yaml /opt/elastalert/config-test.yaml

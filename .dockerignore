@@ -8,3 +8,5 @@
 !elastalert_modules/
 !rule_templates/
 !config/
+
+!.npmrc
